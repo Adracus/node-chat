@@ -3,8 +3,7 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
-var http = require("http").Server(app);
-var io = require("socket.io")(http);
+var http = require("http");
 var messages = [];
 
 var ChatMessage = function(user, text) {
@@ -29,17 +28,17 @@ app.post("/messages", function(req, res) {
 
 	var chatMessage = new ChatMessage(user, text);
 	messages.push(chatMessage);
-	io.broadcast.emit("chat-message", chatMessage);
+	global.io.emit("chat-message", chatMessage);
 
 	return res.status(201).send(chatMessage);
 });
 
-io.on("connection", function() {
+var server = http.createServer(app).listen(process.env.PORT || 3000).on('listening', function() {
 });
 
-var server = http.listen(process.env.PORT || 3000, function () {
-	var host = server.address().address;
-	var port = server.address().port;
-
-  	console.log("Chat app listening at http://%s:%s", host, port);
+global.io = require("socket.io").listen(server).sockets;
+io.on("connection", function(socket) {
+	socket.emit("init", {
+		message: "Welcome!"
+	});
 });

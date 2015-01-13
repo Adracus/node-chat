@@ -52,7 +52,9 @@ chatApp.controller("MessageListCtrl", function($scope, $http, $sce) {
 
 	socket.on("chat-message", function(message) {
 		$scope.messages.push(Message.parse(message));
-		scrollDown();
+		$scope.$apply(function() {
+			scrollDown();
+		});
 	});
 
 	$scope.send = function() {
