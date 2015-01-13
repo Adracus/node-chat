@@ -2,12 +2,13 @@
 
 var socket = io.connect();
 
-var chatApp = angular.module("chat", []);
+var chatApp = angular.module("chat", ['ngSanitize']);
 
-var Message = function(user, text, timestamp) {
+var Message = function(user, text, timestamp, media) {
 	this.user = user || "Anonymous";
-	this.text = Message.encodeText(text || "");
+	this.text = text || "";
 	this.timestamp = timestamp || new Date();
+	this.media = media || {images: []};
 
 	this.timestampString = function() {
 		return moment(this.timestamp).fromNow();
@@ -19,24 +20,14 @@ Message.parse = function(message) {
 	var user = message.user;
 	var text = message.text;
 	var timestamp = message.timestamp;
+	var media = message.media;
 
-	return new Message(user, text, timestamp);
+	console.log(media);
+	return new Message(user, text, timestamp, media);
 };
 
-Message.encodeText = function(text) {
-	var words = text.split(" ");
-	return words.map(function(word) {
-		if (word.isUrl()) {
-			if (word.isImage()) return "<img src=\"" + word + "\" />";
-			return "<a href=\"" + word + "\">" + word + "</a>";
-		}
-		return word;
-	}).join(" ");
-};
-
-chatApp.controller("MessageListCtrl", function($scope, $http, $sce) {
+chatApp.controller("MessageListCtrl", function($scope, $http) {
 	$scope.messages = [];
-	$scope.sce = $sce;
 
 	var scrollDown = function() {
 		setTimeout(function() {

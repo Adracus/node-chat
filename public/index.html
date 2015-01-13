@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-sanitize.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 	<script type="text/javascript" src="script.js"></script>
 
@@ -57,7 +58,11 @@
 							<b>{{message.user}}</b>
 						</div>
 						<div class="col-md-10">
-							<p ng-bind-html-unsafe><span ng-bind-html="sce.trustAsHtml(message.text)"></span></p>
+							<p ng-bind-html="message.text | linky" />
+							<br ng-if="message.media.images.length > 0" />
+							<div ng-repeat="url in message.media.images track by $index"/>
+								<img ng-src="{{url}}">
+							</div>
 							<small class="timehint">{{message.timestampString()}}</small>
 						</div>
 					</div>
