@@ -1,6 +1,6 @@
 "use strict";
 
-var socket = io();
+var socket = io.connect();
 
 var chatApp = angular.module("chat", []);
 
