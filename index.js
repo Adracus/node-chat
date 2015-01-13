@@ -29,7 +29,7 @@ app.post("/messages", function(req, res) {
 
 	var chatMessage = new ChatMessage(user, text);
 	messages.push(chatMessage);
-	io.emit("chat-message", chatMessage);
+	io.broadcast.emit("chat-message", chatMessage);
 
 	return res.status(201).send(chatMessage);
 });
