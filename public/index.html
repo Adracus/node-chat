@@ -60,9 +60,17 @@
 						<div class="col-md-10">
 							<p ng-bind-html="message.text | linky" />
 							<br ng-if="message.media.images.length > 0" />
-							<div ng-repeat="url in message.media.images track by $index"/>
-								<img ng-src="{{url}}">
+							<div ng-repeat="url in message.media.images track by $index">
+								<img ng-src="{{trust(url)}}" />
 							</div>
+							<br ng-if="message.media.videos.length > 0" />
+							<video width="320" height="240" ng-repeat="url in message.media.videos track by $index" controls>
+								<source ng-src="{{trust(url)}}" />
+							</video>
+							<br ng-if="message.media.audios.length > 0" />
+							<audio ng-repeat="url in message.media.audios track by $index" controls>
+								<source ng-src="{{trust(url)}}" />
+							</audio>
 							<small class="timehint">{{message.timestampString()}}</small>
 						</div>
 					</div>
