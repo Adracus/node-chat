@@ -58,7 +58,7 @@
 							<b>{{message.user}}</b>
 						</div>
 						<div class="col-md-10">
-							<p ng-bind-html="message.text | linky" />
+							<p ng-bind-html="message.text | linky:'_blank'" />
 							<br ng-if="message.media.images.length > 0" />
 							<div ng-repeat="url in message.media.images track by $index">
 								<img ng-src="{{trust(url)}}" />
